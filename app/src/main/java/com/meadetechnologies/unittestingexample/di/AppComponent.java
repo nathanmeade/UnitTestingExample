@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.meadetechnologies.unittestingexample.BaseApplication;
 
+import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -11,6 +13,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjectionModule;
 import dagger.android.AndroidInjector;
 
+@Singleton
 @Component(
         modules = {AndroidInjectionModule.class, AppModule.class, ActivityBuildersModule.class, ViewModelFactoryModule.class}
 )
