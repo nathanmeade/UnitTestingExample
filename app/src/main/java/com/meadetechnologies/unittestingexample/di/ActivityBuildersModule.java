@@ -1,6 +1,6 @@
 package com.meadetechnologies.unittestingexample.di;
 
-import com.meadetechnologies.unittestingexample.NotesListActivity;
+import com.meadetechnologies.unittestingexample.ui.noteslist.NotesListActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
