@@ -5,8 +5,10 @@ import android.app.Application;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.meadetechnologies.unittestingexample.models.Note;
 import com.meadetechnologies.unittestingexample.persistence.NoteDao;
 import com.meadetechnologies.unittestingexample.persistence.NoteDatabase;
+import com.meadetechnologies.unittestingexample.util.TestUtil;
 
 import org.junit.After;
 import org.junit.Before;

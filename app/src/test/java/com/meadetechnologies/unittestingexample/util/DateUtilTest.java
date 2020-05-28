@@ -1,5 +1,7 @@
 package com.meadetechnologies.unittestingexample.util;
 
+import com.meadetechnologies.unittestingexample.models.Note;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
