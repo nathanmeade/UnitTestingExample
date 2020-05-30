@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import io.reactivex.Single;
 
+import static com.meadetechnologies.unittestingexample.repository.NoteRepository.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -57,7 +58,7 @@ public class NoteRepositoryTest {
         verifyNoMoreInteractions(noteDao);
 
         System.out.println("Returned value" + returnedValue.data);
-        assertEquals(Resource.success(1, NoteRepository.INSERT_SUCCESS), returnedValue);
+        assertEquals(Resource.success(1, INSERT_SUCCESS), returnedValue);
 
         //Same test but with RxJava:
 /*        noteRepository.insertNote(NOTE1)
@@ -84,7 +85,7 @@ public class NoteRepositoryTest {
         verify(noteDao).insertNote(any(Note.class));
         verifyNoMoreInteractions(noteDao);
 
-        assertEquals(Resource.error(null, NoteRepository.INSERT_FAILURE), returnedValue);
+        assertEquals(Resource.error(null, INSERT_FAILURE), returnedValue);
     }
 
     /*
@@ -102,6 +103,68 @@ public class NoteRepositoryTest {
                 noteRepository.insertNote(note);
             }
         });
-        assertEquals(NoteRepository.NOTE_TITLE_NULL, exception.getMessage());
+        assertEquals(NOTE_TITLE_NULL, exception.getMessage());
+    }
+
+    /*
+        update note
+        verify correct method is called
+        confirm observer is triggered
+        confirm number of rows updated
+     */
+
+    @Test
+    void updateNote_returnNumRowsUpdated() throws Exception {
+        //Arrange
+        final int updatedRow = 1;
+        when(noteDao.updateNote(any(Note.class))).thenReturn(Single.just(updatedRow));
+
+        //Act
+        final Resource<Integer> returnedValue = noteRepository.updateNote(NOTE1).blockingFirst();
+
+        //Assert
+        verify(noteDao).updateNote(any(Note.class));
+        verifyNoMoreInteractions(noteDao);
+
+        assertEquals(Resource.success(updatedRow, UPDATE_SUCCESS), returnedValue);
+    }
+/*
+        update note
+        failure (-1)
+     */
+
+    @Test
+    void updateNote_returnFailure() throws Exception {
+        //Arrange
+        final int failedInsert = -1;
+        final Single<Integer> returnedData = Single.just(failedInsert);
+        when(noteDao.updateNote(any(Note.class))).thenReturn(returnedData);
+
+        //Act
+        final Resource<Integer> returnedValue = noteRepository.updateNote(NOTE1).blockingFirst();
+
+        //Assert
+        verify(noteDao).updateNote(any(Note.class));
+        verifyNoMoreInteractions(noteDao);
+
+        assertEquals(Resource.error(failedInsert, UPDATE_FAILURE), returnedValue);
+    }
+/*
+        update note
+        null title
+        throw exception
+     */
+
+    @Test
+    void updateNote_nullTitle_throwException() throws Exception {
+        Exception exception = assertThrows(Exception.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                final Note note = new Note(TestUtil.TEST_NOTE_1);
+                note.setTitle(null);
+                noteRepository.updateNote(note);
+            }
+        });
+        assertEquals(NOTE_TITLE_NULL, exception.getMessage());
     }
 }
